@@ -140,8 +140,9 @@ Grid.prototype.setWalkableAt = function(x, y, walkable) {
  *  diagonalOffsets[(i + 1) % 4] is valid.
  * @param {Node} node
  * @param {DiagonalMovement} diagonalMovement
+ * @param {function} diagFn
  */
-Grid.prototype.getNeighbors = function(node, diagonalMovement) {
+Grid.prototype.getNeighbors = function(node, diagonalMovement, diagFn) {
     var x = node.x,
         y = node.y,
         neighbors = [],
@@ -191,6 +192,12 @@ Grid.prototype.getNeighbors = function(node, diagonalMovement) {
         d1 = true;
         d2 = true;
         d3 = true;
+    } else if (diagonalMovement === DiagonalMovement.Custom) {
+        const diagonals = diagFn(node, nodes);
+        d0 = diagonals.d0;
+        d1 = diagonals.d1;
+        d2 = diagonals.d2;
+        d3 = diagonals.d3;
     } else {
         throw new Error('Incorrect value of diagonalMovement');
     }

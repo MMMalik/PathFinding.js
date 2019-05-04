@@ -20,6 +20,7 @@ var DiagonalMovement = require('../core/DiagonalMovement');
 function AStarFinder(opt) {
     opt = opt || {};
     this.allowDiagonal = opt.allowDiagonal;
+    this.diagFn = opt.diagFn;
     this.dontCrossCorners = opt.dontCrossCorners;
     this.heuristic = opt.heuristic || Heuristic.manhattan;
     this.weight = opt.weight || 1;
@@ -59,6 +60,7 @@ AStarFinder.prototype.findPath = function(startX, startY, endX, endY, grid) {
         endNode = grid.getNodeAt(endX, endY),
         heuristic = this.heuristic,
         diagonalMovement = this.diagonalMovement,
+        diagFn = this.diagFn,
         weight = this.weight,
         abs = Math.abs, SQRT2 = Math.SQRT2,
         node, neighbors, neighbor, i, l, x, y, ng;
@@ -83,7 +85,7 @@ AStarFinder.prototype.findPath = function(startX, startY, endX, endY, grid) {
         }
 
         // get neigbours of the current node
-        neighbors = grid.getNeighbors(node, diagonalMovement);
+        neighbors = grid.getNeighbors(node, diagonalMovement, diagFn);
         for (i = 0, l = neighbors.length; i < l; ++i) {
             neighbor = neighbors[i];
 
